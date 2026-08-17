@@ -168,6 +168,17 @@ export const GAMES: Game[] = [
     confidenceNote: 'Fuente única sin verificar.'
   },
   {
+    slug: 'heroes-and-generals',
+    name: 'Heroes & Generals',
+    engine: 'Retox',
+    yaw: 0.15126,
+    scaleLabel: 'sens',
+    input: { min: 0.0001, max: 100, step: 0, decimals: 6 },
+    confidence: 'B',
+    confidenceNote: 'Yaw derivado de una única medición (1000 DPI, 23 cm/360) y referido al build 2023 que ejecutan los proyectos comunitarios como HeroesNGenerals Sunrise; el cliente cambió el cálculo del movimiento del ratón a finales de 2016. Los límites de entrada no están verificados: la sensibilidad solo se fija por consola y ninguna fuente pública documenta su rango. Calibra para confirmarlo.',
+    aliases: ['hg', 'hng', 'heroes-generals']
+  },
+  {
     slug: 'pubg',
     name: 'PUBG: Battlegrounds',
     engine: 'Unreal Engine',
@@ -196,17 +207,6 @@ export const GAMES: Game[] = [
     input: { min: 0.01, max: 10, step: 0.01, decimals: 2 },
     confidence: 'C',
     confidenceNote: 'El escalado ha cambiado entre actualizaciones. Requiere calibración propia.'
-  },
-  {
-    slug: 'heroes-and-generals',
-    name: 'Heroes & Generals',
-    engine: 'Retox',
-    yaw: null,
-    scaleLabel: 'sens',
-    input: { min: 0.0001, max: 100, step: 0, decimals: 6 },
-    confidence: 'C',
-    confidenceNote: 'Los servidores oficiales cerraron; la entrada cubre el build 2023 que ejecutan los proyectos comunitarios (HeroesNGenerals Sunrise). El yaw solo tiene una fuente y el cliente cambió el cálculo del movimiento del ratón a finales de 2016, así que no se publica constante. Los límites de entrada tampoco están verificados: la sensibilidad numérica solo se fija por consola y ninguna fuente pública documenta su rango. Requiere calibración propia.',
-    aliases: ['hg', 'hng', 'heroes-generals']
   }
 ]
 

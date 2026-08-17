@@ -148,6 +148,7 @@ Verificación de plausibilidad aplicada (todos dan cm/360 dentro del rango real 
 | Battlefield 6 / 2042 | **0.0022 por 1 %** | Fuentes en conflicto (0.0022 vs 0.0066). Con 0.0022, CS2 1.0 = BF 10 %. Plausible pero sin confirmar. |
 | Destiny 2 | **0.0066** | Además tiene un **tope de velocidad de giro al esprintar**, que rompe el modelo lineal en ese estado. |
 | Delta Force | **0.022** | Fuente única, sin verificar. |
+| Heroes & Generals | **0.15126** | Fuente única (medición de DPI Wizard: 1000 DPI, 23 cm/360, sens 0.262835). Pasa la prueba de plausibilidad, pero el cliente cambió el cálculo del ratón a finales de 2016 y los builds revividos abarcan 2013–2023. Ver §4.2. |
 
 ### Tier C — solo calibración, sin constante publicada
 
@@ -155,7 +156,6 @@ Verificación de plausibilidad aplicada (todos dan cm/360 dentro del rango real 
 |---|---|
 | **PUBG: Battlegrounds** | Curva **no lineal** y sistema por-mira (general, ADS, cada óptica por separado). Las fuentes publican 0.022 y 0.002222; **ambas son imposibles**: con sens general 50 @800 DPI, 0.022 daría 1.04 cm/360. Descartado. |
 | **The Finals** | Contradicción de ~30×. Se publica yaw 0.0066, pero las mismas fuentes dicen que los pros usan sens 18–35 @800 DPI (→ ~7 cm/360, absurdo) *y* eDPI 300–800 (→ sens ~0.5, incompatible con 18–35). Los datos disponibles no son fiables. |
-| **Heroes & Generals** | Ver §4.2. Fuente única para el yaw, plausibilidad no comprobable de forma independiente, y divergencia de input entre los builds revividos. |
 | Rust, Roblox, Splitgate 2, FragPunk | Escalas propias, actualizaciones frecuentes de Unity/UE que cambian el escalado, y datos publicados no verificables. |
 
 ### 4.1 Casos especiales de fórmula
@@ -174,7 +174,7 @@ Conversión directa a CS2: `sensCS2 = porcentajeX × 0.25250` (es decir `0.00555
 
 **Rainbow Six Siege** — modelar con parámetro `fov`; hasta verificarlo empíricamente, tratar el yaw como constante y mostrar el aviso de Tier B.
 
-### 4.2 Heroes & Generals — por qué queda en Tier C
+### 4.2 Heroes & Generals — derivación del yaw y por qué es Tier B
 
 Caso documentado aparte porque es el primer juego del catálogo cuyos servidores oficiales cerraron y que sobrevive mediante builds comunitarios.
 
@@ -184,15 +184,25 @@ Caso documentado aparte porque es el primer juego del catálogo cuyos servidores
 - Servidores oficiales cerrados el **25-05-2023** por TLM Games.
 - La sensibilidad numérica **solo se fija por consola** (tecla `\`), según DPI Wizard. El deslizador del menú no expone ningún número.
 
-**Motivos del Tier C (los tres son independientes entre sí):**
+**Derivación del yaw.** El dato cuantitativo procede de una medición publicada en el foro de mouse-sensitivity.com: 1000 DPI, 23 cm por vuelta completa, sens in-game `0.262835`. Aplicando la calibración de §8:
 
-1. **Fuente única para el yaw.** El único dato cuantitativo localizado es una medición de un usuario en el foro de mouse-sensitivity.com: 1000 DPI, 23 cm/360, sens in-game `0.262835`. De ahí `yaw = 914.4 / (1000 × 0.262835 × 23) ≈ 0.15126`. Ninguna otra fuente publica constante para este juego: los conversores localizados (sensconvert, sensgod, aiming.pro, egamersworld) no exponen sus valores.
-2. **La prueba de plausibilidad de §6 no es aplicable.** El juego no tiene escena profesional ni base pública de eDPI, así que el único cm/360 disponible (23 cm) procede de la misma fuente que la sensibilidad. Contrastar uno contra otro es circular y no constituye verificación.
-3. **Divergencia de input entre versiones.** mouse-sensitivity.com documenta un cambio en el cálculo del movimiento del ratón a **finales de 2016**, con correcciones repetidas de su calculadora. Los builds revividos abarcan 2013 (dic 2024), 2014 (feb 2025), 2017 (may 2025) y 2023 (12-06-2026), es decir, a ambos lados de ese cambio. Una sola constante no puede cubrir la entrada.
+```
+yaw = 914.4 / (DPI × S × D) = 914.4 / (1000 × 0.262835 × 23) = 0.1512604…
+```
+
+Valor publicado: **0.15126**, redondeado a la precisión que soporta la medición de origen.
+
+**Prueba de plausibilidad (§6.2).** El cm/360 de la propia medición, 23 cm, cae dentro del rango exigido de 15–70 cm. Como esa cifra viene de la misma fuente que la sensibilidad, se hace además una comprobación cruzada independiente: aiming.pro recomienda 28–43 cm/360 para este juego, lo que con yaw 0.15126 a 800 DPI exige sens de **0.176 a 0.270**. Ese intervalo contiene el `0.262835` documentado por DPI Wizard. Dos fuentes sin relación entre sí convergen en el mismo orden de magnitud de sensibilidad de consola, lo que respalda la constante.
+
+**Por qué B y no A.** Tres reservas, ninguna de ellas suficiente para descartar el valor pero sí para publicarlo con aviso:
+
+1. **Fuente única para la medición.** La comprobación cruzada usa aiming.pro, catalogado como fiabilidad **baja** en §13.1. Ningún conversor localizado (sensconvert, sensgod, egamersworld) expone la constante que emplea, así que no hay segunda medición directa.
+2. **Sin verificación contra escena profesional.** El juego no tiene circuito competitivo ni base pública de eDPI, de modo que falta el contraste que sí valida a los juegos del Tier A.
+3. **Divergencia de input entre versiones.** mouse-sensitivity.com documenta un cambio en el cálculo del movimiento del ratón a **finales de 2016**, con correcciones repetidas de su calculadora. Los builds revividos abarcan 2013 (dic 2024), 2014 (feb 2025), 2017 (may 2025) y 2023 (12-06-2026), es decir, a ambos lados de ese cambio. La constante corresponde al comportamiento posterior a 2016 y no debe asumirse válida en los builds de 2013 y 2014.
 
 **Sobre las versiones comunitarias:** el sucesor activo es **HeroesNGenerals Sunrise**. Su web no declara que ejecute el cliente original sin modificar, por lo que la equivalencia de motor no puede darse por supuesta. Aparte, Insight Interactive desarrolla una **reconstrucción limpia en Unreal Engine 5**: motor distinto, yaw no transferible en ningún caso.
 
-Build de referencia para la entrada del catálogo: **2023**, el último oficial.
+Build de referencia para la entrada del catálogo: **2023**, el último oficial. Al ser Tier B, la app ofrece calibración (§8) para que el usuario confirme la constante en el build concreto que juegue.
 
 ---
 
