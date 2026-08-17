@@ -155,6 +155,7 @@ Verificación de plausibilidad aplicada (todos dan cm/360 dentro del rango real 
 |---|---|
 | **PUBG: Battlegrounds** | Curva **no lineal** y sistema por-mira (general, ADS, cada óptica por separado). Las fuentes publican 0.022 y 0.002222; **ambas son imposibles**: con sens general 50 @800 DPI, 0.022 daría 1.04 cm/360. Descartado. |
 | **The Finals** | Contradicción de ~30×. Se publica yaw 0.0066, pero las mismas fuentes dicen que los pros usan sens 18–35 @800 DPI (→ ~7 cm/360, absurdo) *y* eDPI 300–800 (→ sens ~0.5, incompatible con 18–35). Los datos disponibles no son fiables. |
+| **Heroes & Generals** | Ver §4.2. Fuente única para el yaw, plausibilidad no comprobable de forma independiente, y divergencia de input entre los builds revividos. |
 | Rust, Roblox, Splitgate 2, FragPunk | Escalas propias, actualizaciones frecuentes de Unity/UE que cambian el escalado, y datos publicados no verificables. |
 
 ### 4.1 Casos especiales de fórmula
@@ -172,6 +173,26 @@ degPerCount = porcentajeX × 0.005555
 Conversión directa a CS2: `sensCS2 = porcentajeX × 0.25250` (es decir `0.005555 / 0.022`).
 
 **Rainbow Six Siege** — modelar con parámetro `fov`; hasta verificarlo empíricamente, tratar el yaw como constante y mostrar el aviso de Tier B.
+
+### 4.2 Heroes & Generals — por qué queda en Tier C
+
+Caso documentado aparte porque es el primer juego del catálogo cuyos servidores oficiales cerraron y que sobrevive mediante builds comunitarios.
+
+**Datos verificados:**
+
+- **Motor: Retox**, propietario de Reto-Moto. No es CryEngine; se comprobó expresamente porque varias fuentes secundarias lo dan por hecho.
+- Servidores oficiales cerrados el **25-05-2023** por TLM Games.
+- La sensibilidad numérica **solo se fija por consola** (tecla `\`), según DPI Wizard. El deslizador del menú no expone ningún número.
+
+**Motivos del Tier C (los tres son independientes entre sí):**
+
+1. **Fuente única para el yaw.** El único dato cuantitativo localizado es una medición de un usuario en el foro de mouse-sensitivity.com: 1000 DPI, 23 cm/360, sens in-game `0.262835`. De ahí `yaw = 914.4 / (1000 × 0.262835 × 23) ≈ 0.15126`. Ninguna otra fuente publica constante para este juego: los conversores localizados (sensconvert, sensgod, aiming.pro, egamersworld) no exponen sus valores.
+2. **La prueba de plausibilidad de §6 no es aplicable.** El juego no tiene escena profesional ni base pública de eDPI, así que el único cm/360 disponible (23 cm) procede de la misma fuente que la sensibilidad. Contrastar uno contra otro es circular y no constituye verificación.
+3. **Divergencia de input entre versiones.** mouse-sensitivity.com documenta un cambio en el cálculo del movimiento del ratón a **finales de 2016**, con correcciones repetidas de su calculadora. Los builds revividos abarcan 2013 (dic 2024), 2014 (feb 2025), 2017 (may 2025) y 2023 (12-06-2026), es decir, a ambos lados de ese cambio. Una sola constante no puede cubrir la entrada.
+
+**Sobre las versiones comunitarias:** el sucesor activo es **HeroesNGenerals Sunrise**. Su web no declara que ejecute el cliente original sin modificar, por lo que la equivalencia de motor no puede darse por supuesta. Aparte, Insight Interactive desarrolla una **reconstrucción limpia en Unreal Engine 5**: motor distinto, yaw no transferible en ningún caso.
+
+Build de referencia para la entrada del catálogo: **2023**, el último oficial.
 
 ---
 
@@ -200,8 +221,11 @@ Ese error relativo es idéntico en sensibilidad, en eDPI y en velocidad de giro.
 | Quake Champions / Halo Infinite / Source | 0.01 | 30 | 0.01 | 3 | |
 | Escape from Tarkov | 0.01 | 5 | 0.01 | 2 | |
 | Battlefield 6 | 0 | 100 | 1 | 0 | Porcentaje entero. |
+| Heroes & Generals | 0.0001 | 100 | continuo | 6 | **Sin verificar** — ver aviso debajo. |
 
 > Estos límites se han recopilado de documentación de comunidad y deben marcarse en la UI como verificables. Si un valor está mal, el impacto es acotado: la app siempre muestra también el valor exacto.
+
+> **Excepción declarada — Heroes & Generals.** Estos límites **no** están verificados y no deben tratarse como dato. El único elemento observado es la cantidad de decimales: la sensibilidad se introduce por consola como decimal libre y el valor documentado (`0.262835`) tiene 6. El mínimo, el máximo y el carácter continuo se han tomado prestados del patrón de CS2 (entrada por consola, decimal continuo) como marcador de posición, porque el esquema de datos exige valores y ninguna fuente pública documenta el rango real: tres hilos distintos de Steam preguntando literalmente por la sensibilidad «en números» quedaron sin respuesta, la wiki oficial devuelve 402 y PCGamingWiki 403. Se registra aquí de forma explícita para que la divergencia sea visible en lugar de quedar disimulada como un dato más de la tabla. Corregir en cuanto se pueda leer el rango real en un cliente de HeroesNGenerals Sunrise.
 
 ---
 
@@ -308,6 +332,8 @@ Para la funcionalidad de «¿es razonable mi sensibilidad?». Valores orientativ
 | Call of Duty | 4000 | 4800 | 7000 | 20–35 cm |
 | Fortnite (X %×DPI) | 4000 | 5600 | 8000 | 21–41 cm |
 
+**Heroes & Generals queda deliberadamente fuera de esta tabla.** No existe escena profesional ni base pública de eDPI de la que derivar los tres valores. La única cifra localizada es una recomendación genérica de 28–43 cm/360 en aiming.pro, que es contenido SEO sin respaldo y además no permitiría calcular eDPI alguno sin la constante yaw, que tampoco se publica (§4.2). Sin `proEdpi`, la app simplemente no muestra el módulo de «¿es razonable mi sensibilidad?» para este juego.
+
 Interpretación general por cm/360, válida para cualquier juego:
 
 - **< 20 cm** — muy rápida. Arena shooters, movilidad alta.
@@ -370,3 +396,12 @@ Se listan con su fiabilidad evaluada. Los sitios marcados como **baja** se usaro
 - [activeplayer.io — juegos de PC más jugados](https://activeplayer.io/top-20-most-popular-pc-games/) — **media**. Selección del catálogo de juegos.
 - [gurugamer — shooters con más jugadores 2026](https://gurugamer.com/pc-console/top-10-multiplayer-shooters-with-the-most-players-in-2026-26750) — **media**. Selección del catálogo.
 - [edpi-calculator.org](https://edpi-calculator.org/tools/sensitivity-converter), [cs2sens.com](https://cs2sens.com/), [hypestkey.com](https://hypestkey.com/mouse-sensitivity-converter/), [sensconverter.app](https://sensconverter.app/) — **baja**. Contenido SEO; usados solo para triangular.
+
+### 13.1 Fuentes específicas de Heroes & Generals (§4.2)
+
+- [mouse-sensitivity.com — hilo de Heroes and Generals](https://www.mouse-sensitivity.com/forums/topic/179-heroes-and-generals/) — **alta**. Origen del único dato cuantitativo (1000 DPI, 23 cm/360, sens 0.262835) y de que la sensibilidad solo se fija por consola.
+- [mouse-sensitivity.com — updates de Heroes and Generals](https://www.mouse-sensitivity.com/updates/updates/heroes-and-generals-r90/) — **alta**. Documenta el cambio del cálculo de movimiento del ratón a finales de 2016 y las correcciones sucesivas de la calculadora.
+- [Wikipedia — Heroes & Generals](https://en.wikipedia.org/wiki/Heroes_%26_Generals) — **alta**. Motor Retox, cierre del 25-05-2023 y cronología de los builds revividos (2013, 2014, 2017, 2023).
+- [HeroesNGenerals Sunrise](https://heroes-and-generals.com/) — **media**. Sucesor comunitario activo. No declara qué build ejecuta ni si el cliente está sin modificar.
+- [Steam — «mouse sensitivity in numbers»](https://steamcommunity.com/app/227940/discussions/4/343786746008409431/), [Steam — «Config file to edit? Config through console?»](https://steamcommunity.com/app/227940/discussions/0/45350791340168325/), [Steam — «How to know my Exact Mouse Sensitivity?»](https://steamcommunity.com/app/227940/discussions/0/37470847934690116) — **media**. Los tres hilos preguntan por el valor numérico de la sensibilidad y quedan sin respuesta útil; es la evidencia de que el rango del deslizador no está documentado públicamente.
+- [aiming.pro — Heroes & Generals](https://aiming.pro/mouse-sensitivity-calculator/heroes-generals), [sensgod](https://www.sensgod.com/mouse-sensitivity-converter/heroes-generals/), [sensconvert](https://sensconvert.com/gaming-sensitivity-converter/heroes-generals-sensitivity-calculator/), [egamersworld](https://egamersworld.com/gaming/mouse-sensitivity-converter/heroes-generals) — **baja**. Conversores que ofrecen el juego sin publicar la constante que usan; no sirven como segunda fuente.
