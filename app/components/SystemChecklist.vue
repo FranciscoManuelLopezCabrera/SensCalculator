@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const items = [
   { label: 'Puntero de Windows', value: 'En 6/11, que es el multiplicador 1.0.' },
   { label: 'Precisión del puntero', value: 'Desactivada. Es aceleración.' },
