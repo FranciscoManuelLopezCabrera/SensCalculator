@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/public-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/public-sans-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@theme {
+  --color-paper: #d8dcda;
+  --color-paper-2: #cdd2cf;
+  --color-ink: #14181a;
+  --color-ink-2: #4a5350;
+  --color-rule: #a6aeaa;
+  --color-index: #b8442a;
+
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
+
+  --text-2xs: 12px;
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-md: 20px;
+  --text-lg: 28px;
+  --text-xl: 56px;
+
+  --radius-none: 0px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-radius: 0 !important;
+    box-shadow: none;
+  }
+
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .data {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-2);
+  }
+
+  .panel {
+    border: 1px solid var(--color-rule);
+    background: var(--color-paper);
+  }
+
+  .field {
+    width: 100%;
+    border: 1px solid var(--color-rule);
+    background: var(--color-paper-2);
+    padding: 8px 10px;
+    font-family: var(--font-mono);
+    color: var(--color-ink);
+  }
+
+  .field:read-only {
+    color: var(--color-ink-2);
+  }
+
+  .btn {
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
+    padding: 8px 12px;
+    font-weight: 600;
+  }
+
+  .btn[aria-pressed="true"] {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .btn:hover,
+  .field:hover {
+    border-color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
