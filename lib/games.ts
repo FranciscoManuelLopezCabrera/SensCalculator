@@ -196,6 +196,17 @@ export const GAMES: Game[] = [
     input: { min: 0.01, max: 10, step: 0.01, decimals: 2 },
     confidence: 'C',
     confidenceNote: 'El escalado ha cambiado entre actualizaciones. Requiere calibración propia.'
+  },
+  {
+    slug: 'heroes-and-generals',
+    name: 'Heroes & Generals',
+    engine: 'Retox',
+    yaw: null,
+    scaleLabel: 'sens',
+    input: { min: 0.0001, max: 100, step: 0, decimals: 6 },
+    confidence: 'C',
+    confidenceNote: 'Los servidores oficiales cerraron; la entrada cubre el build 2023 que ejecutan los proyectos comunitarios (HeroesNGenerals Sunrise). El yaw solo tiene una fuente y el cliente cambió el cálculo del movimiento del ratón a finales de 2016, así que no se publica constante. Los límites de entrada tampoco están verificados: la sensibilidad numérica solo se fija por consola y ninguna fuente pública documenta su rango. Requiere calibración propia.',
+    aliases: ['hg', 'hng', 'heroes-generals']
   }
 ]
 
